@@ -23,6 +23,22 @@ export class CrudService {
       status: 0,
       notes: 'This pig was found in a field.',
     },
+    {
+      reporterName: 'Goerge Hamilton',
+      reporterNumber: 1234567890,
+      date: new Date(new Date().getTime() + 1000 * 60 * 60 * 24),
+      foundLocation: {
+        name: 'Metro',
+        lat: 40.0149856,
+        lng: -105.2705456,
+      },
+      pigFound: {
+        breed: 'Berkshire',
+        pid: 1234567890,
+      },
+      status: 1,
+      notes: 'This pig was found in a field.',
+    },
   ];
 
   constructor() {}
