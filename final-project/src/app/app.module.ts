@@ -9,6 +9,9 @@ import { PigMapComponent } from './pig-map/pig-map.component';
 import { AddPigReportComponent } from './add-pig-report/add-pig-report.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { StatusEditPipe } from './status-edit.pipe';
+
+
 
 @NgModule({
   declarations: [
@@ -17,6 +20,7 @@ import { HttpClientModule } from '@angular/common/http';
     PigReportComponent,
     PigMapComponent,
     AddPigReportComponent,
+    StatusEditPipe,
   ],
   imports: [
     BrowserModule,
@@ -26,7 +30,7 @@ import { HttpClientModule } from '@angular/common/http';
     HttpClientModule,
     ReactiveFormsModule,
   ],
-  providers: [],
+  providers: [StatusEditPipe],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
