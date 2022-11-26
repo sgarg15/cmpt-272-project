@@ -2,7 +2,7 @@
 <td>{{pigReport.reporterName}}</td>
 <td>{{pigReport.date | date:'MMM d, y, (h:mm a)' }}</td>
 <td>{{pigReport.status | statusEdit: 'status'}}
-	<i class="bi bi-pen" data-bs-toggle="modal" data-bs-target="#editStatus"></i>
+	<i class="bi bi-pen" (click)="editStatus($event, pigReport.date)"></i>
 </td>
 <td class="text-center">
 	<button type="button" class="btn btn-primary ">

@@ -20,7 +20,7 @@ export class CrudService {
         breed: 'Berkshire',
         pid: 1234567890,
       },
-      status: Status.READYFORPICKUP,
+      status: 0,
       notes: 'This pig was found in a field.',
     },
   ];
@@ -34,6 +34,15 @@ export class CrudService {
   addPigReport(pigReport: PigReportInterface) {
     this.pigReportList.push(pigReport);
     console.log('New pig report added!');
+    console.log(this.pigReportList);
+  }
+
+  updatePigReportStatus(pigReport: PigReportInterface) {
+    const index = this.pigReportList.findIndex((report) => {
+      return report.date.valueOf() === pigReport.date.valueOf();
+    });
+    this.pigReportList[index].status = pigReport.status;
+    console.log('Pig report status updated!');
     console.log(this.pigReportList);
   }
 

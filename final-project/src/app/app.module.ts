@@ -11,8 +11,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { StatusEditPipe } from './status-edit.pipe';
 import { DeletePigReportComponent } from './delete-pig-report/delete-pig-report.component';
-
-
+import { EditPigReportComponent } from './info-pig-report/edit-pig-report.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +22,7 @@ import { DeletePigReportComponent } from './delete-pig-report/delete-pig-report.
     AddPigReportComponent,
     StatusEditPipe,
     DeletePigReportComponent,
+    EditPigReportComponent,
   ],
   imports: [
     BrowserModule,

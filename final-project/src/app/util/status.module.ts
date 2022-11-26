@@ -1,6 +1,6 @@
 export enum Status {
-  READYFORPICKUP = 1,
-  RETRIEVED = 2,
+  READYFORPICKUP = 0,
+  RETRIEVED = 1,
 }
 
 export function getStatus(status: Status): string {
