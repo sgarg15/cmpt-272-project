@@ -6,11 +6,12 @@
 			<th scope="col" (click)="sortByTime()">Time Reported <i class="bi bi-arrow-down-up"></i></th>
 			<th scope="col" (click)="sortByStatus()">Status <i class="bi bi-arrow-down-up"></i></th>
 			<th scope="col"></th>
+
 		</tr>
 	</thead>
 	<tbody>
 		<ng-container *ngFor="let pigReport of pigReportList">
-			<tr app-pig-report class="align-middle">
+			<tr app-pig-report [pigReport]="pigReport" class=" align-middle">
 			</tr>
 		</ng-container>
 	</tbody>
