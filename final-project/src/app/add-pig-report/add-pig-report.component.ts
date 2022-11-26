@@ -2,6 +2,7 @@ import { Time } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { CrudService } from '../crud.service';
 import { StatusEditPipe } from '../status-edit.pipe';
 import { PigReportInterface } from '../util/pigReport.module';
 
@@ -13,7 +14,11 @@ import { PigReportInterface } from '../util/pigReport.module';
 export class AddPigReportComponent implements OnInit {
   form: FormGroup;
 
-  constructor(private router: Router, private statusEdit: StatusEditPipe) {
+  constructor(
+    private router: Router,
+    private statusEdit: StatusEditPipe,
+    private crud: CrudService
+  ) {
     let formControl = {
       reporterName: new FormControl(null, [Validators.required]),
       reporterPhone: new FormControl(null, [Validators.required]),
@@ -48,13 +53,15 @@ export class AddPigReportComponent implements OnInit {
 
   onSubmit(values: any) {
     console.log(values);
+    let currentSeconds = new Date().getSeconds();
     //Create a new report object
     var date: Date = new Date(
       values.date.split('-')[0],
       values.date.split('-')[1] - 1,
       values.date.split('-')[2],
       values.time.split(':')[0],
-      values.time.split(':')[1]
+      values.time.split(':')[1],
+      currentSeconds
     );
 
     var newPigReport: PigReportInterface = {
@@ -70,15 +77,18 @@ export class AddPigReportComponent implements OnInit {
         lng: values.locationLong,
       },
       notes: values.notes,
-      date: values.date,
+      date: date,
       status: this.statusEdit.transform(values.status, 'string'),
     };
 
     console.log('newPigReport: ', newPigReport);
 
+    //Add the new report to the list
+    this.crud.addPigReport(newPigReport);
+
     // navigation back to root
-    // this.form.reset();
-    // this.router.navigate(['']);
+    this.form.reset();
+    this.router.navigate(['']);
   }
 
   ngOnInit(): void {}
