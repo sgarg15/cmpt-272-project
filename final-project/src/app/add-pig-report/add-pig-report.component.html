@@ -1,0 +1,73 @@
+<div class="card shadow-lg p-3 mb-5 bg-body rounded" style="margin-left: 25%; margin-right: 25%; margin-top: 20px; border-radius: 30px;">
+	<div class="card-header py-3">
+		<h5 class="mb-0">Add Pig Report</h5>
+	</div>
+	<div class="card-body">
+		<form id="addPigReportForm" (ngSubmit)="onSubmit(form.value)" [formGroup]="form">
+			<section class=" form-floating  mb-3">
+				<input type="text" class="form-control" id="reporterName" placeholder="Robin" formControlName="reporterName" required>
+				<label for="reporterName" class="form-label">Reporter Name</label>
+			</section>
+			<section class=" form-floating mb-3">
+				<input type="number" class="form-control" id="reporterPhone" placeholder="(778) - 777 - 9999" formControlName="reporterPhone"
+					required>
+				<label for="reporterPhone" class="form-label">Reporter Phone Number</label>
+			</section>
+			<section class=" form-floating mb-3">
+				<input type="text" class="form-control" id="pigBreed" placeholder="50 kg" formControlName="pigBreed" required>
+				<label for="pigBreed" class="form-label">Breed</label>
+			</section>
+			<section class=" form-floating mb-3">
+				<input type="number" class="form-control" id="pigPid" placeholder="Cute" formControlName="pigPid" required>
+				<label for="pigPid" class="form-label">PID</label>
+			</section>
+			<section class="form-floating mb-3">
+				<select id="locationSetter" class="form-select " aria-label="Default select example" formControlName="locationSetter"
+					(change)="toggleNewLocation()">
+					<option>Other</option>
+					<option>MetroTown</option>
+				</select>
+				<label for="locationSetter" class="form-label">Location</label>
+			</section>
+			<section class=" form-floating mb-3">
+				<input type="text" class="form-control" id="locationName" placeholder="Cute" formControlName="locationName" required>
+				<label for="locationName" class="form-label">Location Name</label>
+			</section>
+			<section class=" form-floating mb-3">
+				<input type="number" class="form-control" id="locationLat" placeholder="Cute" formControlName="locationLat" required>
+				<label for="locationLat" class="form-label">Location Latitude</label>
+			</section>
+			<section class=" form-floating mb-3">
+				<input type="number" class="form-control" id="locationLong" placeholder="Cute" formControlName="locationLong" required>
+				<label for="locationLong" class="form-label">Location Longitude</label>
+			</section>
+			<section class=" form-floating mb-3">
+				<input type="text" class="form-control" id="notes" placeholder="Cute" formControlName="notes" required>
+				<label for="notes" class="form-label">Notes</label>
+			</section>
+			<section class=" form-floating mb-3">
+				<input type="date" class="form-control" id="date" placeholder="Cute" formControlName="date" required>
+				<label for="date" class="form-label">Date/Time</label>
+			</section>
+			<section class=" form-floating mb-3">
+				<input type="time" class="form-control" id="time" placeholder="Cute" formControlName="time" required>
+				<label for="time" class="form-label">Time</label>
+			</section>
+			<section class="form-floating mb-3">
+				<select id="status" class="form-select " aria-label="Default select example" formControlName="status">
+					<option>Ready for Pickup</option>
+					<option>Retrieved</option>
+				</select>
+				<label for="status" class="form-label">Status</label>
+			</section>
+
+			<hr>
+			<section class="text-end">
+				<a href="">
+					<button style="margin-right: 20px;" type="button" class="btn btn-secondary text-end" (click)="form.reset()">Close</button>
+				</a>
+				<button type="submit" class="btn btn-primary text-end" id="liveAlertBtn" [disabled]="!form.valid">Submit</button>
+			</section>
+		</form>
+	</div>
+</div>
