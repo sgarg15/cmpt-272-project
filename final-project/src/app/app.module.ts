@@ -10,6 +10,7 @@ import { AddPigReportComponent } from './add-pig-report/add-pig-report.component
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { StatusEditPipe } from './status-edit.pipe';
+import { DeletePigReportComponent } from './delete-pig-report/delete-pig-report.component';
 
 
 
@@ -21,6 +22,7 @@ import { StatusEditPipe } from './status-edit.pipe';
     PigMapComponent,
     AddPigReportComponent,
     StatusEditPipe,
+    DeletePigReportComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,4 +1,6 @@
+import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Router } from '@angular/router';
 import { PigReportInterface } from '../util/pigReport.module';
 
 @Component({
@@ -9,9 +11,12 @@ import { PigReportInterface } from '../util/pigReport.module';
 export class PigReportComponent implements OnInit {
   @Input()
   pigReport!: PigReportInterface;
-  @Output() delete = new EventEmitter();
 
-  constructor() {}
+  constructor(private router: Router) {}
+
+  onDelete(evt: any, date: Date) {
+    this.router.navigate(['/deletePigReport', date.toJSON()]);
+  }
 
   ngOnInit(): void {}
 }

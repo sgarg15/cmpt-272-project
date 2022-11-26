@@ -10,7 +10,7 @@ export class CrudService {
     {
       reporterName: 'John Doe',
       reporterNumber: 1234567890,
-      date: new Date('2021-01-01'),
+      date: new Date(),
       foundLocation: {
         name: 'Boulder',
         lat: 40.0149856,
@@ -43,5 +43,11 @@ export class CrudService {
     );
     console.log('Pig report deleted!');
     console.log(this.pigReportList);
+  }
+
+  getPigReportByDate(date: Date): PigReportInterface | undefined {
+    return this.pigReportList.find((report) => {
+      return report.date.valueOf() === date.valueOf();
+    });
   }
 }
