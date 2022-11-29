@@ -10,7 +10,7 @@ export class CrudService {
     {
       reporterName: 'John Doe',
       reporterNumber: 1234567890,
-      date: new Date(),
+      date: new Date(2022, 10, 22, 12, 12, 26),
       foundLocation: {
         name: 'Boulder',
         lat: 40.0149856,
@@ -26,7 +26,7 @@ export class CrudService {
     {
       reporterName: 'Goerge Hamilton',
       reporterNumber: 1234567890,
-      date: new Date(new Date().getTime() + 1000 * 60 * 60 * 24),
+      date: new Date(2022, 11, 28, 17, 12, 26),
       foundLocation: {
         name: 'Metro',
         lat: 40.0149856,

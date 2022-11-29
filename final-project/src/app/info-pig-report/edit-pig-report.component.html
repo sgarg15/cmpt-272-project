@@ -1,46 +1,63 @@
 <div class="card shadow-lg p-3 mb-5 bg-body rounded" style="margin-left: 25%; margin-right: 25%; margin-top: 20px; border-radius: 30px;">
 	<div class="card-header py-3">
-		<h5 class="mb-0">Edit Pig Report Status</h5>
+		<h5 class="mb-0">Pig Report Information</h5>
 	</div>
 	<div class="card-body">
-		<section *ngIf="!passwordCheck">
-			<div class="">
-				<div class="mb-3">
-					<label for="passwordDelete" class="form-label">Password</label>
-					<input type="password" class="form-control" id="passwordDelete" [(ngModel)]="password">
-				</div>
-			</div>
-			<section *ngIf="error">
-				<div class="alert alert-danger alert-dismissible" alert-dismissible role="alert">
-					Incorrect Password
-				</div>
+		<form id="pigReportInformation" [formGroup]="form">
+			<section class=" form-floating  mb-3">
+				<input type="text" class="form-control" id="reporterName" placeholder="Robin" formControlName="reporterName">
+				<label for="reporterName" class="form-label">Reporter Name</label>
 			</section>
-			<hr>
-			<section class="text-end">
-				<a href="">
-					<button style="margin-right: 20px;" type="button" class="btn btn-secondary text-end">Close</button>
-				</a>
-				<button type="submit" class="btn btn-primary text-end" id="liveAlertBtn" (click)="checkPassword()">Submit</button>
+			<section class=" form-floating mb-3">
+				<input type="number" class="form-control" id="reporterPhone" placeholder="(778) - 777 - 9999" formControlName="reporterPhone">
+				<label for="reporterPhone" class="form-label">Reporter Phone Number</label>
 			</section>
-		</section>
-
-		<section *ngIf="passwordCheck">
-			<!-- Update status select here -->
-			<div class="">
-				<label for="status">Status</label>
-				<select class="form-select" id="status" [(ngModel)]="updatedStatus">
-					<option value=0>Ready for Pickup</option>
-					<option value=1>Retrieved</option>
+			<section class=" form-floating mb-3">
+				<input type="text" class="form-control" id="pigBreed" placeholder="50 kg" formControlName="pigBreed">
+				<label for="pigBreed" class="form-label">Breed</label>
+			</section>
+			<section class=" form-floating mb-3">
+				<input type="number" class="form-control" id="pigPid" placeholder="Cute" formControlName="pigPid">
+				<label for="pigPid" class="form-label">PID</label>
+			</section>
+			<section class=" form-floating mb-3">
+				<input type="text" class="form-control" id="locationName" placeholder="Cute" formControlName="locationName">
+				<label for="locationName" class="form-label">Location Name</label>
+			</section>
+			<section class=" form-floating mb-3">
+				<input type="number" class="form-control" id="locationLat" placeholder="Cute" formControlName="locationLat">
+				<label for="locationLat" class="form-label">Location Latitude</label>
+			</section>
+			<section class=" form-floating mb-3">
+				<input type="number" class="form-control" id="locationLong" placeholder="Cute" formControlName="locationLong">
+				<label for="locationLong" class="form-label">Location Longitude</label>
+			</section>
+			<section class=" form-floating mb-3">
+				<input type="text" class="form-control" id="notes" placeholder="Cute" formControlName="notes">
+				<label for="notes" class="form-label">Notes</label>
+			</section>
+			<section class=" form-floating mb-3">
+				<input type="date" class="form-control" id="date" placeholder="Cute" formControlName="date">
+				<label for="date" class="form-label">Date</label>
+			</section>
+			<section class=" form-floating mb-3">
+				<input type="time" class="form-control" id="time" placeholder="Cute" formControlName="time">
+				<label for="time" class="form-label">Time</label>
+			</section>
+			<section class="form-floating mb-3">
+				<select id="status" class="form-select " aria-label="Default select example" formControlName="status">
+					<option value="READYFORPICKUP">Ready for pickup</option>
+					<option value="RETRIEVED">Retrieved</option>
 				</select>
-			</div>
+				<label for="status" class="form-label">Status</label>
+			</section>
+
 			<hr>
 			<section class="text-end">
 				<a href="">
 					<button style="margin-right: 20px;" type="button" class="btn btn-secondary text-end">Close</button>
 				</a>
-				<button type="submit" class="btn btn-primary text-end" id="liveAlertBtn" (click)="updateStatus()">Submit</button>
 			</section>
-		</section>
-
+		</form>
 	</div>
 </div>
