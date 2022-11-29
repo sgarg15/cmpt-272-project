@@ -23,9 +23,9 @@
 			</section>
 			<section class="form-floating mb-3">
 				<select id="locationSetter" class="form-select " aria-label="Default select example" formControlName="locationSetter"
-					(change)="toggleNewLocation()">
+					(change)="toggleNewLocation()" >
 					<option>Other</option>
-					<option>MetroTown</option>
+					<option *ngFor="let location of locations" [value]="location.name">{{location.name}}</option>
 				</select>
 				<label for="locationSetter" class="form-label">Location</label>
 			</section>

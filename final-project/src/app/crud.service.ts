@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { PigLocation } from './util/location.module';
 import { PigReportInterface } from './util/pigReport.module';
 import { Status } from './util/status.module';
 
@@ -12,9 +13,9 @@ export class CrudService {
       reporterNumber: 1234567890,
       date: new Date(2022, 10, 22, 12, 12, 26),
       foundLocation: {
-        name: 'Boulder',
-        lat: 40.0149856,
-        lng: -105.2705456,
+        name: 'Abbotsford',
+        lat: 49.043122,
+        lng: -122.308044,
       },
       pigFound: {
         breed: 'Berkshire',
@@ -28,9 +29,9 @@ export class CrudService {
       reporterNumber: 1234567890,
       date: new Date(2022, 11, 28, 17, 12, 26),
       foundLocation: {
-        name: 'Metro',
-        lat: 40.0149856,
-        lng: -105.2705456,
+        name: 'Vancouver',
+        lat: 49.25788,
+        lng: -123.119659,
       },
       pigFound: {
         breed: 'Berkshire',
@@ -41,8 +42,47 @@ export class CrudService {
     },
   ];
 
+  locationList: PigLocation[] = [
+    {
+      name: 'Abbotsford',
+      lat: 49.043122,
+      lng: -122.308044,
+    },
+    {
+      name: 'Vancouver',
+      lat: 49.25788,
+      lng: -123.119659,
+    },
+    {
+      name: 'Langley',
+      lat: 49.099823,
+      lng: -122.66922,
+    },
+    {
+      name: 'Surrey',
+      lat: 49.187025,
+      lng: -122.842255,
+    },
+  ];
+
+  mapList: any[] = [
+    {
+      name: 'Abbotsford',
+      lat: 49.043122,
+      lng: -122.308044,
+      num: 1,
+    },
+    {
+      name: 'Vancouver',
+      lat: 49.25788,
+      lng: -123.119659,
+      num: 1,
+    },
+  ];
+
   constructor() {}
 
+  //Pig Report Functions
   getPigReportList() {
     return this.pigReportList;
   }
@@ -74,5 +114,20 @@ export class CrudService {
     return this.pigReportList.find((report) => {
       return report.date.valueOf() === date.valueOf();
     });
+  }
+
+  //Location Functions
+  getLocationList(): PigLocation[] {
+    return this.locationList;
+  }
+
+  addLocationList(newLocation: PigLocation) {
+    this.locationList.push(newLocation);
+    console.log(this.locationList);
+  }
+
+  //Map Functions
+  getMapList(): any[] {
+    return this.mapList;
   }
 }

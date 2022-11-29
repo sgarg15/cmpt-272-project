@@ -13,6 +13,7 @@ import { PigReportInterface } from '../util/pigReport.module';
 })
 export class AddPigReportComponent implements OnInit {
   form: FormGroup;
+  locations;
 
   constructor(
     private router: Router,
@@ -44,11 +45,24 @@ export class AddPigReportComponent implements OnInit {
       this.form.controls['locationLong'].setValue(null);
     } else {
       //Later change dependend on locationSetter
-
-      this.form.controls['locationName'].setValue('MetroTown');
-      this.form.controls['locationLat'].setValue(12414);
-      this.form.controls['locationLong'].setValue(12414);
+      let selectedLocation = this.form.controls['locationSetter'].value;
+      //Loop through locations and find the selected location
+      for (let i = 0; i < this.locations.length; i++) {
+        if (this.locations[i].name === selectedLocation) {
+          this.form.controls['locationName'].setValue(this.locations[i].name);
+          this.form.controls['locationLat'].setValue(this.locations[i].lat);
+          this.form.controls['locationLong'].setValue(this.locations[i].lng);
+        }
+      }
+      //   this.form.controls['locationName'].setValue('MetroTown');
+      //   this.form.controls['locationLat'].setValue(12414);
+      //   this.form.controls['locationLong'].setValue(12414);
     }
+  }
+
+  updateLocationList() {
+    this.locations = this.crud.getLocationList();
+    console.log(this.locations);
   }
 
   onSubmit(values: any) {
@@ -83,6 +97,10 @@ export class AddPigReportComponent implements OnInit {
 
     console.log('newPigReport: ', newPigReport);
 
+    if (this.form.controls['locationSetter'].value === 'Other') {
+      this.crud.addLocationList(newPigReport.foundLocation);
+    }
+
     //Add the new report to the list
     this.crud.addPigReport(newPigReport);
 
@@ -91,5 +109,7 @@ export class AddPigReportComponent implements OnInit {
     this.router.navigate(['']);
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.updateLocationList();
+  }
 }

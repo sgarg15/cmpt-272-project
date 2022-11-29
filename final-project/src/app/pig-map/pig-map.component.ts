@@ -3,6 +3,8 @@ import * as L from 'leaflet';
 
 //Need to add to make leaflet icons work
 import { icon, Marker} from 'leaflet';
+import { CrudService } from '../crud.service';
+import { PigLocation } from '../util/location.module';
 const iconRetinaUrl = 'assets/marker-icon-2x.png';
 const iconUrl = 'assets/marker-icon.png';
 const shadowUrl = 'assets/marker-shadow.png';
@@ -14,10 +16,9 @@ const iconDefault = icon({
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
   tooltipAnchor: [16, -28],
-  shadowSize: [41, 41]
-}); 
+  shadowSize: [41, 41],
+});
 Marker.prototype.options.icon = iconDefault;
-
 
 @Component({
   selector: 'app-pig-map',
@@ -26,6 +27,7 @@ Marker.prototype.options.icon = iconDefault;
 })
 export class PigMapComponent implements AfterViewInit {
   private map: any;
+  private locations: any[];
 
   private initMap(): void {
     this.map = L.map('map', {
@@ -45,26 +47,29 @@ export class PigMapComponent implements AfterViewInit {
         zoomOffset: -1,
       }
     ).addTo(this.map);
-
-    const onMapClick = (e: { latlng: L.LatLngExpression }) => {
-      var marker = L.marker(e.latlng).addTo(this.map);
-      marker
-        .bindPopup('You clicked the map at ' + e.latlng.toString())
-        .openPopup();
-    };
-
-    this.map.on('click', onMapClick);
   }
 
-  public addMarkerToMap(lat: number, lng: number) {
+  public addMarkersToMap() {
+    this.locations.forEach((location) => {
+      this.addMarkerToMap(
+        location.lat,
+        location.lng,
+        location.name,
+        location.num
+      );
+    });
+  }
+
+  public addMarkerToMap(lat: number, lng: number, name: string, num?: number) {
     var marker = L.marker([lat, lng]).addTo(this.map);
-    marker.bindPopup('<b>Hello world!</b><br>I am a popup.').openPopup();
+    marker.bindPopup(`<b>${name}</b><br>${num} pigs reported`).openPopup();
   }
 
-  constructor() {}
+  constructor(private crud: CrudService) {}
 
   ngAfterViewInit(): void {
     this.initMap();
-	this.addMarkerToMap(49.1913, -122.849);
+    this.locations = this.crud.getMapList();
+    this.addMarkersToMap();
   }
 }
