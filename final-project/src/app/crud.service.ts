@@ -65,7 +65,7 @@ export class CrudService {
     },
   ];
 
-  mapList: any[] = [
+  mapList: PigLocation[] = [
     {
       name: 'Abbotsford',
       lat: 49.043122,
@@ -129,5 +129,13 @@ export class CrudService {
   //Map Functions
   getMapList(): any[] {
     return this.mapList;
+  }
+
+  updateMapListNum(location: PigLocation) {
+    const index = this.mapList.findIndex((loc) => {
+      return loc.name === location.name;
+    });
+    this.mapList[index].num++;
+    console.log(this.mapList);
   }
 }

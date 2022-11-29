@@ -27,7 +27,9 @@ Marker.prototype.options.icon = iconDefault;
 })
 export class PigMapComponent implements AfterViewInit {
   private map: any;
-  private locations: any[];
+  private locations: PigLocation[];
+
+  constructor(private crud: CrudService) {}
 
   private initMap(): void {
     this.map = L.map('map', {
@@ -64,8 +66,6 @@ export class PigMapComponent implements AfterViewInit {
     var marker = L.marker([lat, lng]).addTo(this.map);
     marker.bindPopup(`<b>${name}</b><br>${num} pigs reported`).openPopup();
   }
-
-  constructor(private crud: CrudService) {}
 
   ngAfterViewInit(): void {
     this.initMap();

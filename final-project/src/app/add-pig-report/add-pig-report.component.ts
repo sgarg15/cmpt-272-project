@@ -101,6 +101,8 @@ export class AddPigReportComponent implements OnInit {
       this.crud.addLocationList(newPigReport.foundLocation);
     }
 
+	this.crud.updateMapListNum(newPigReport.foundLocation);
+
     //Add the new report to the list
     this.crud.addPigReport(newPigReport);
 
