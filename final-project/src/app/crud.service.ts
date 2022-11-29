@@ -2,11 +2,14 @@ import { Injectable } from '@angular/core';
 import { PigLocation } from './util/location.module';
 import { PigReportInterface } from './util/pigReport.module';
 import { Status } from './util/status.module';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CrudService {
+  apiUrl: string = 'https://272.selfip.net/apps/RIrQxXAkvT/collections';
   pigReportList: PigReportInterface[] = [
     {
       reporterName: 'John Doe',
@@ -42,46 +45,118 @@ export class CrudService {
     },
   ];
 
-  locationList: PigLocation[] = [
-    {
-      name: 'Abbotsford',
-      lat: 49.043122,
-      lng: -122.308044,
-    },
-    {
-      name: 'Vancouver',
-      lat: 49.25788,
-      lng: -123.119659,
-    },
-    {
-      name: 'Langley',
-      lat: 49.099823,
-      lng: -122.66922,
-    },
-    {
-      name: 'Surrey',
-      lat: 49.187025,
-      lng: -122.842255,
-    },
-  ];
+  serverPigReportList: any;
 
-  mapList: PigLocation[] = [
-    {
-      name: 'Abbotsford',
-      lat: 49.043122,
-      lng: -122.308044,
-      num: 1,
-    },
-    {
-      name: 'Vancouver',
-      lat: 49.25788,
-      lng: -123.119659,
-      num: 1,
-    },
-  ];
+  locationList: PigLocation[];
 
-  constructor() {}
+  private subject: BehaviorSubject<PigLocation[]>;
 
+  constructor(private http: HttpClient) {
+    this.subject = new BehaviorSubject(this.locationList);
+
+    this.getLocationsFromServer();
+    this.getPigReportsFromServer();
+  }
+
+  //Database Functions
+  getLocationsFromServer() {
+    let url = this.apiUrl + '/locations/documents/';
+    this.http.get(url).subscribe((data) => {
+      let locations = data[0]['data'];
+      this.locationList = locations;
+      this.subject.next(this.locationList);
+    });
+  }
+
+  //Convert Server list to PigReportInterface
+  convertToPigReportInterface() {
+    for (let i = 0; i < this.serverPigReportList.length; i++) {
+      console.log(this.serverPigReportList[i]['data']);
+      let data = this.serverPigReportList[i]['data'];
+      data.forEach((element) => {
+        let newPigReport: PigReportInterface = {
+          reporterName: element.reporterName,
+          reporterNumber: element.reporterNumber,
+          date: new Date(element.date),
+          foundLocation: element.foundLocation,
+          pigFound: element.pigFound,
+          status: element.status,
+          notes: element.notes,
+        };
+        this.pigReportList.push(newPigReport);
+      });
+    }
+    console.log('this.pigReportList', this.pigReportList);
+  }
+
+  //Get Server List of Pig Reports
+  getPigReportsFromServer() {
+    let url = this.apiUrl + '/pigReports/documents/';
+    this.pigReportList = [];
+    this.http.get(url).subscribe((data) => {
+      this.serverPigReportList = data;
+      console.log('this.serverPigReportList', this.serverPigReportList);
+      this.convertToPigReportInterface();
+    });
+  }
+
+  //Check if server list contains pig pid
+  checkIfPigReportExists(pid: number): number {
+    for (let i = 0; i < this.serverPigReportList.length; i++) {
+      if (this.serverPigReportList[i]['key'] == pid) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  //Add Pig Report to Server
+  addPigReportToServer(pigReport: PigReportInterface) {
+    let pid = pigReport.pigFound.pid;
+    let url = this.apiUrl + '/pigReports/documents/';
+    let pigReportURL = this.apiUrl + `/pigReports/documents/${pid}/`;
+    let indexOfPigReport = this.checkIfPigReportExists(pid);
+    if (indexOfPigReport != -1) {
+      //Add the pig report to the server pig report list
+      this.serverPigReportList[indexOfPigReport]['data'].push(pigReport);
+      console.log(
+        'this.serverPigReportList Updated: ',
+        this.serverPigReportList
+      );
+
+      //Update the server pig report list
+      this.http
+        .put(pigReportURL, {
+          key: pid.toString(),
+          data: this.serverPigReportList[indexOfPigReport]['data'],
+        })
+        .subscribe((data) => {
+          console.log('Pig Report Updated on Server');
+          console.log(data);
+          this.getPigReportsFromServer();
+        });
+    } else {
+      this.serverPigReportList.push({
+        key: pid.toString(),
+        data: [pigReport],
+      });
+      console.log(
+        'this.serverPigReportList Updated with new pid: ',
+        this.serverPigReportList
+      );
+
+      //Add the pig report to the server pig report list
+      this.http
+        .post(url, { key: pid.toString(), data: [pigReport] })
+        .subscribe((data) => {
+          console.log('Pig Report Added to Server');
+          console.log(data);
+          this.getPigReportsFromServer();
+        });
+    }
+  }
+
+  //--------------------------------------------------------------------------------
   //Pig Report Functions
   getPigReportList() {
     return this.pigReportList;
@@ -89,6 +164,7 @@ export class CrudService {
 
   addPigReport(pigReport: PigReportInterface) {
     this.pigReportList.push(pigReport);
+    this.addPigReportToServer(pigReport);
     console.log('New pig report added!');
     console.log(this.pigReportList);
   }
@@ -123,19 +199,20 @@ export class CrudService {
 
   addLocationList(newLocation: PigLocation) {
     this.locationList.push(newLocation);
+    this.subject.next(this.locationList);
     console.log(this.locationList);
   }
 
   //Map Functions
-  getMapList(): any[] {
-    return this.mapList;
+  getMapList(): Observable<PigLocation[]> {
+    return this.subject.asObservable();
   }
 
   updateMapListNum(location: PigLocation) {
-    const index = this.mapList.findIndex((loc) => {
+    const index = this.locationList.findIndex((loc) => {
       return loc.name === location.name;
     });
-    this.mapList[index].num++;
-    console.log(this.mapList);
+    this.locationList[index].num++;
+    console.log(this.locationList);
   }
 }

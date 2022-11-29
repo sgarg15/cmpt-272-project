@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { CrudService } from '../crud.service';
 import { PigReportInterface } from '../util/pigReport.module';
 import { Status } from '../util/status.module';
@@ -15,7 +16,11 @@ export class PigReportListComponent implements OnInit {
   private sortTime = true;
   private sortStatus = true;
 
-  constructor(private crud: CrudService) {}
+  constructor(private crud: CrudService, private router: Router) {}
+
+  addNewPig() {
+    this.router.navigate(['/addPigReport']);
+  }
 
   sortByLocation() {
     console.log('sorting by location');
