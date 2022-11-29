@@ -19,11 +19,11 @@ export class PigReportComponent implements OnInit {
   }
 
   onInfo(evt: any, date: Date) {
-    this.router.navigate(['/editPigReport', date.toJSON()]);
+    this.router.navigate(['/info', date.toJSON()]);
   }
 
   editStatus(evt: any, date: Date) {
-    this.router.navigate(['/', date.toJSON()]);
+    this.router.navigate(['/editPigReport', date.toJSON()]);
   }
 
   ngOnInit(): void {}

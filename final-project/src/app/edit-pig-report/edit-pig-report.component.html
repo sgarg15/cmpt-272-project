@@ -1,0 +1,46 @@
+<div class="card shadow-lg p-3 mb-5 bg-body rounded" style="margin-left: 25%; margin-right: 25%; margin-top: 20px; border-radius: 30px;">
+	<div class="card-header py-3">
+		<h5 class="mb-0">Edit Pig Report Status</h5>
+	</div>
+	<div class="card-body">
+		<section *ngIf="!passwordCheck">
+			<div class="">
+				<div class="mb-3">
+					<label for="passwordDelete" class="form-label">Password</label>
+					<input type="password" class="form-control" id="passwordDelete" [(ngModel)]="password">
+				</div>
+			</div>
+			<section *ngIf="error">
+				<div class="alert alert-danger alert-dismissible" alert-dismissible role="alert">
+					Incorrect Password
+				</div>
+			</section>
+			<hr>
+			<section class="text-end">
+				<a href="">
+					<button style="margin-right: 20px;" type="button" class="btn btn-secondary text-end">Close</button>
+				</a>
+				<button type="submit" class="btn btn-primary text-end" id="liveAlertBtn" (click)="checkPassword()">Submit</button>
+			</section>
+		</section>
+
+		<section *ngIf="passwordCheck">
+			<!-- Update status select here -->
+			<div class="">
+				<label for="status">Status</label>
+				<select class="form-select" id="status" [(ngModel)]="updatedStatus">
+					<option value=0>Ready for Pickup</option>
+					<option value=1>Retrieved</option>
+				</select>
+			</div>
+			<hr>
+			<section class="text-end">
+				<a href="">
+					<button style="margin-right: 20px;" type="button" class="btn btn-secondary text-end">Close</button>
+				</a>
+				<button type="submit" class="btn btn-primary text-end" id="liveAlertBtn" (click)="updateStatus()">Submit</button>
+			</section>
+		</section>
+
+	</div>
+</div>

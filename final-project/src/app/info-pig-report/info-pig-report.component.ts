@@ -7,11 +7,11 @@ import { Status } from '../util/status.module';
 import { formatDate } from '@angular/common';
 
 @Component({
-  selector: 'app-edit-pig-report',
-  templateUrl: './edit-pig-report.component.html',
-  styleUrls: ['./edit-pig-report.component.css'],
+  selector: 'app-info-pig-report',
+  templateUrl: './info-pig-report.component.html',
+  styleUrls: ['./info-pig-report.component.css'],
 })
-export class EditPigReportComponent implements OnInit {
+export class InfoPigReportComponent implements OnInit {
   password!: String;
   givenDateString: string;
   givenDate: Date = new Date();
