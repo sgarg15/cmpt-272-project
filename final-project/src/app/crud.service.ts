@@ -59,6 +59,8 @@ export class CrudService {
   }
 
   //Database Functions
+  //#region
+  //Get Locations list from server
   getLocationsFromServer() {
     let url = this.apiUrl + '/locations/documents/';
     this.http.get(url).subscribe((data) => {
@@ -67,7 +69,6 @@ export class CrudService {
       this.subject.next(this.locationList);
     });
   }
-
   //Convert Server list to PigReportInterface
   convertToPigReportInterface() {
     for (let i = 0; i < this.serverPigReportList.length; i++) {
@@ -156,8 +157,28 @@ export class CrudService {
     }
   }
 
-  //--------------------------------------------------------------------------------
+  //Update Pig Report Status
+  updatePigReportStatusServer(index: number, pigReport: PigReportInterface) {
+    let pid = pigReport.pigFound.pid;
+    let pigReportURL = this.apiUrl + `/pigReports/documents/${pid}/`;
+
+    //Update the server pig report list
+    this.http
+      .put(pigReportURL, {
+        key: pid.toString(),
+        data: this.serverPigReportList[index]['data'],
+      })
+      .subscribe((data) => {
+        console.log('Pig Report Updated on Server');
+        console.log(data);
+        this.getPigReportsFromServer();
+      });
+  }
+
+  //#endregion
+
   //Pig Report Functions
+  //#region
   getPigReportList() {
     return this.pigReportList;
   }
@@ -170,10 +191,37 @@ export class CrudService {
   }
 
   updatePigReportStatus(pigReport: PigReportInterface) {
+    console.log('updatePigReportStatus: ', pigReport);
+
     const index = this.pigReportList.findIndex((report) => {
       return report.date.valueOf() === pigReport.date.valueOf();
     });
     this.pigReportList[index].status = pigReport.status;
+
+    //Also update the server pig report list variable
+    let pid = pigReport.pigFound.pid;
+    let indexOfPigReport = this.checkIfPigReportExists(pid);
+
+    let indexOfPigReportStatus = this.serverPigReportList[indexOfPigReport][
+      'data'
+    ].findIndex((report) => {
+      console.log('report.date.valueOf(): ', new Date(report.date).valueOf());
+      console.log('pigReport.date.valueOf(): ', pigReport.date.valueOf());
+      return new Date(report.date).valueOf() === pigReport.date.valueOf();
+    });
+
+    console.log(' this.serverPigReportList: ', this.serverPigReportList);
+    console.log('indexOfPigReport: ', indexOfPigReport);
+    console.log('indexOfPigReportStatus: ', indexOfPigReportStatus);
+
+    this.serverPigReportList[indexOfPigReport]['data'][
+      indexOfPigReportStatus
+    ].status = pigReport.status;
+    console.log('this.serverPigReportList', this.serverPigReportList);
+
+    //Update the server pig report list
+    this.updatePigReportStatusServer(indexOfPigReport, pigReport);
+
     console.log('Pig report status updated!');
     console.log(this.pigReportList);
   }
@@ -191,8 +239,10 @@ export class CrudService {
       return report.date.valueOf() === date.valueOf();
     });
   }
+  //#endregion
 
   //Location Functions
+  //#region
   getLocationList(): PigLocation[] {
     return this.locationList;
   }
@@ -202,8 +252,10 @@ export class CrudService {
     this.subject.next(this.locationList);
     console.log(this.locationList);
   }
+  //#endregion
 
   //Map Functions
+  //#region
   getMapList(): Observable<PigLocation[]> {
     return this.subject.asObservable();
   }
@@ -215,4 +267,5 @@ export class CrudService {
     this.locationList[index].num++;
     console.log(this.locationList);
   }
+  //#endregion
 }

@@ -36,15 +36,16 @@ export class EditPigReportComponent implements OnInit {
 
   updateStatus() {
     this.pigReport = this.crud.getPigReportByDate(this.givenDate);
-    if (this.pigReport) {
-      if (this.updatedStatus === '0') {
-        this.pigReport.status = Status.READYFORPICKUP;
-      } else {
-        this.pigReport.status = Status.RETRIEVED;
-      }
-      this.crud.updatePigReportStatus(this.pigReport!);
-      this.router.navigate(['']);
+	console.log('this.pigReport in edit ', this.pigReport);
+  if (this.pigReport) {
+    if (this.updatedStatus === '0') {
+      this.pigReport.status = Status.READYFORPICKUP;
+    } else {
+      this.pigReport.status = Status.RETRIEVED;
     }
+    this.crud.updatePigReportStatus(this.pigReport);
+    this.router.navigate(['']);
+  }
   }
 
   ngOnInit(): void {
