@@ -10,40 +10,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class CrudService {
   apiUrl: string = 'https://272.selfip.net/apps/RIrQxXAkvT/collections';
-  pigReportList: PigReportInterface[] = [
-    {
-      reporterName: 'John Doe',
-      reporterNumber: 1234567890,
-      date: new Date(2022, 10, 22, 12, 12, 26),
-      foundLocation: {
-        name: 'Abbotsford',
-        lat: 49.043122,
-        lng: -122.308044,
-      },
-      pigFound: {
-        breed: 'Berkshire',
-        pid: 1234567890,
-      },
-      status: 0,
-      notes: 'This pig was found in a field.',
-    },
-    {
-      reporterName: 'Goerge Hamilton',
-      reporterNumber: 1234567890,
-      date: new Date(2022, 11, 28, 17, 12, 26),
-      foundLocation: {
-        name: 'Vancouver',
-        lat: 49.25788,
-        lng: -123.119659,
-      },
-      pigFound: {
-        breed: 'Berkshire',
-        pid: 1234567890,
-      },
-      status: 1,
-      notes: 'This pig was found in a field.',
-    },
-  ];
+  pigReportList: PigReportInterface[] = [];
 
   serverPigReportList: any;
 
@@ -69,6 +36,7 @@ export class CrudService {
       this.subject.next(this.locationList);
     });
   }
+
   //Convert Server list to PigReportInterface
   convertToPigReportInterface() {
     for (let i = 0; i < this.serverPigReportList.length; i++) {
@@ -158,7 +126,7 @@ export class CrudService {
   }
 
   //Update Pig Report Status
-  updatePigReportStatusServer(index: number, pigReport: PigReportInterface) {
+  updatePigReportServer(index: number, pigReport: PigReportInterface) {
     let pid = pigReport.pigFound.pid;
     let pigReportURL = this.apiUrl + `/pigReports/documents/${pid}/`;
 
@@ -175,6 +143,16 @@ export class CrudService {
       });
   }
 
+  //Delete Pig Report from Server
+  deletePigReportFromServer(pigReport: PigReportInterface) {
+    let pid = pigReport.pigFound.pid;
+    let pigReportURL = this.apiUrl + `/pigReports/documents/${pid}/`;
+
+    //Update the server pig report list
+    this.http.delete(pigReportURL).subscribe((data) => {
+      this.getPigReportsFromServer();
+    });
+  }
   //#endregion
 
   //Pig Report Functions
@@ -193,10 +171,11 @@ export class CrudService {
   updatePigReportStatus(pigReport: PigReportInterface) {
     console.log('updatePigReportStatus: ', pigReport);
 
-    const index = this.pigReportList.findIndex((report) => {
-      return report.date.valueOf() === pigReport.date.valueOf();
+    this.pigReportList.forEach((element, index) => {
+      if (element.pigFound.pid == pigReport.pigFound.pid) {
+        this.pigReportList[index].status = pigReport.status;
+      }
     });
-    this.pigReportList[index].status = pigReport.status;
 
     //Also update the server pig report list variable
     let pid = pigReport.pigFound.pid;
@@ -214,22 +193,54 @@ export class CrudService {
     console.log('indexOfPigReport: ', indexOfPigReport);
     console.log('indexOfPigReportStatus: ', indexOfPigReportStatus);
 
+    this.serverPigReportList[indexOfPigReport]['data'].forEach(
+      (element, index) => {
+        this.serverPigReportList[indexOfPigReport]['data'][index].status =
+          pigReport.status;
+      }
+    );
+
     this.serverPigReportList[indexOfPigReport]['data'][
       indexOfPigReportStatus
     ].status = pigReport.status;
     console.log('this.serverPigReportList', this.serverPigReportList);
 
     //Update the server pig report list
-    this.updatePigReportStatusServer(indexOfPigReport, pigReport);
+    this.updatePigReportServer(indexOfPigReport, pigReport);
 
     console.log('Pig report status updated!');
     console.log(this.pigReportList);
   }
 
   deletePigReport(pigReport: PigReportInterface) {
-    this.pigReportList = this.pigReportList.filter(
-      (report) => report !== pigReport
-    );
+    for (let i = 0; i < this.pigReportList.length; i++) {
+      let report = this.pigReportList[i];
+
+      if (report.pigFound.pid == pigReport.pigFound.pid) {
+        this.pigReportList.splice(i, 1);
+        i--;
+      }
+    }
+
+    this.pigReportList.forEach((report, index) => {});
+
+    //Also update the server pig report list variable
+    let pid = pigReport.pigFound.pid;
+    let indexOfPigReport = this.checkIfPigReportExists(pid);
+
+    let indexOfPigReportStatus = this.serverPigReportList[indexOfPigReport][
+      'data'
+    ].findIndex((report) => {
+      console.log('report.date.valueOf(): ', new Date(report.date).valueOf());
+      console.log('pigReport.date.valueOf(): ', pigReport.date.valueOf());
+      return new Date(report.date).valueOf() === pigReport.date.valueOf();
+    });
+
+    this.serverPigReportList.splice(indexOfPigReport, 1);
+
+    //Update the server pig report list
+    this.deletePigReportFromServer(pigReport);
+
     console.log('Pig report deleted!');
     console.log(this.pigReportList);
   }
