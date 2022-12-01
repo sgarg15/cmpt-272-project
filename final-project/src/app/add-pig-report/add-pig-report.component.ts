@@ -89,6 +89,7 @@ export class AddPigReportComponent implements OnInit {
         name: values.locationName,
         lat: values.locationLat,
         lng: values.locationLong,
+        num: 0,
       },
       notes: values.notes,
       date: date,

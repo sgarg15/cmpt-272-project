@@ -33,7 +33,9 @@ export class CrudService {
     this.http.get(url).subscribe((data) => {
       let locations = data[0]['data'];
       this.locationList = locations;
+	  console.log('Getting location from server this.locationList', this.locationList);
       this.subject.next(this.locationList);
+	  console.log('Getting location from server this.locationList', this.locationList);
     });
   }
 
@@ -59,13 +61,19 @@ export class CrudService {
   }
 
   //Get Server List of Pig Reports
-  getPigReportsFromServer() {
+  getPigReportsFromServer(index?: number, pigReport?: PigReportInterface) {
     let url = this.apiUrl + '/pigReports/documents/';
     this.pigReportList = [];
     this.http.get(url).subscribe((data) => {
       this.serverPigReportList = data;
       console.log('this.serverPigReportList', this.serverPigReportList);
       this.convertToPigReportInterface();
+
+	  if (index != undefined && pigReport != undefined) {
+		if(data[index]['data'].length == 0){
+			this.deletePigReportFromServer(pigReport);
+		}
+	  }
     });
   }
 
@@ -139,7 +147,9 @@ export class CrudService {
       .subscribe((data) => {
         console.log('Pig Report Updated on Server');
         console.log(data);
-        this.getPigReportsFromServer();
+        this.getPigReportsFromServer(index, pigReport);
+
+
       });
   }
 
@@ -152,6 +162,19 @@ export class CrudService {
     this.http.delete(pigReportURL).subscribe((data) => {
       this.getPigReportsFromServer();
     });
+  }
+
+  //Update Location Information
+  updateLocationListServer() {
+    console.log('UPLOADING this.locationList', this.locationList);
+    let url = this.apiUrl + '/locations/documents/locationList/';
+    this.http
+      .put(url, { key: 'locationList', data: this.locationList })
+      .subscribe((data) => {
+		this.getLocationsFromServer();	
+        console.log('Location List Updated on Server');
+        console.log(data);
+      });
   }
   //#endregion
 
@@ -213,16 +236,12 @@ export class CrudService {
   }
 
   deletePigReport(pigReport: PigReportInterface) {
-    for (let i = 0; i < this.pigReportList.length; i++) {
-      let report = this.pigReportList[i];
+	this.pigReportList.findIndex((report, index) => {
+		if (report.date.valueOf() == pigReport.date.valueOf()) {
+			this.pigReportList.splice(index, 1);
+		}
+	});
 
-      if (report.pigFound.pid == pigReport.pigFound.pid) {
-        this.pigReportList.splice(i, 1);
-        i--;
-      }
-    }
-
-    this.pigReportList.forEach((report, index) => {});
 
     //Also update the server pig report list variable
     let pid = pigReport.pigFound.pid;
@@ -236,10 +255,14 @@ export class CrudService {
       return new Date(report.date).valueOf() === pigReport.date.valueOf();
     });
 
-    this.serverPigReportList.splice(indexOfPigReport, 1);
+    this.serverPigReportList[indexOfPigReport][
+		'data'
+	  ].splice(indexOfPigReportStatus, 1);
+
+	 this.decrementMapListNum(pigReport.foundLocation);
 
     //Update the server pig report list
-    this.deletePigReportFromServer(pigReport);
+    this.updatePigReportServer(indexOfPigReport, pigReport);
 
     console.log('Pig report deleted!');
     console.log(this.pigReportList);
@@ -259,9 +282,18 @@ export class CrudService {
   }
 
   addLocationList(newLocation: PigLocation) {
-    this.locationList.push(newLocation);
-    this.subject.next(this.locationList);
-    console.log(this.locationList);
+    if (
+      this.locationList.findIndex(
+        (location) => location.name === newLocation.name
+      ) === -1
+    ) {
+      this.locationList.push(newLocation);
+      this.updateLocationListServer();
+      this.subject.next(this.locationList);
+    } else {
+      console.log('Location already exists!');
+      this.updateMapListNum(newLocation);
+    }
   }
   //#endregion
 
@@ -272,11 +304,44 @@ export class CrudService {
   }
 
   updateMapListNum(location: PigLocation) {
+    console.log('updateMapListNum: ', location);
     const index = this.locationList.findIndex((loc) => {
-      return loc.name === location.name;
+      return loc.name == location.name;
     });
+
+    console.log('index: ', index);
+
     this.locationList[index].num++;
+
+    console.log('this.locationList: ', this.locationList);
+
+    this.updateLocationListServer();
+
+    this.subject.next(this.locationList);
     console.log(this.locationList);
   }
+
+  decrementMapListNum(location: PigLocation) {
+    console.log('decrementMapListNum: ', location);
+    const index = this.locationList.findIndex((loc) => {
+		console.log('loc.lat: ', loc.lat);
+		console.log('location.lat: ', location.lat);
+		console.log('loc.lng: ', loc.lng);
+		console.log('location.lng: ', location.lng);
+      return loc.lat == location.lat && loc.lng == location.lng;
+    });
+
+    console.log('index: ', index);
+
+    this.locationList[index].num--;
+
+    console.log('this.locationList: ', this.locationList);
+    this.subject.next(this.locationList);
+
+    this.updateLocationListServer();
+
+    console.log(this.locationList);
+  }
+
   //#endregion
 }
