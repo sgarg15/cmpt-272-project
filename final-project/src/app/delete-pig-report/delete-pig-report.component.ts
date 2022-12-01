@@ -16,18 +16,26 @@ export class DeletePigReportComponent implements OnInit {
   passwordCheck: boolean = false;
   error: boolean = false;
 
+  passwordField: boolean = false;
+
   constructor(
     private ActivatedRoute: ActivatedRoute,
     private crud: CrudService,
     private router: Router
   ) {}
 
+  togglePasswordVisibility() {
+    this.passwordField = !this.passwordField;
+  }
+
   checkPassword() {
     console.log(this.password);
     if (this.password === 'OINK!!') {
       this.passwordCheck = !this.passwordCheck;
     } else {
-      this.error = !this.error;
+      if (!this.error) {
+        this.error = !this.error;
+      }
     }
   }
 

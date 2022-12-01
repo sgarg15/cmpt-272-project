@@ -7,7 +7,13 @@
 			<div class="">
 				<div class="mb-3">
 					<label for="passwordDelete" class="form-label">Password</label>
-					<input type="password" class="form-control" id="passwordDelete" [(ngModel)]="password">
+					<div class="input-group mb-3">
+						<input [type]="passwordField ? 'text' : 'password'" class="form-control" aria-describedby="button-addon1" [(ngModel)]="password" />
+						<button class="btn btn-outline-secondary" type="button" id="button-addon1" (click)="togglePasswordVisibility()">
+							<i class="bi-eye-slash" [ngClass]="{
+												'bi-eye': passwordField
+											}"></i></button>
+					</div>
 				</div>
 			</div>
 			<section *ngIf="error">

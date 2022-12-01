@@ -17,6 +17,8 @@ export class EditPigReportComponent implements OnInit {
   passwordCheck: boolean = false;
   error: boolean = false;
 
+  passwordField: boolean = false;
+
   updatedStatus!: string;
 
   constructor(
@@ -24,6 +26,10 @@ export class EditPigReportComponent implements OnInit {
     private crud: CrudService,
     private router: Router
   ) {}
+
+  togglePasswordVisibility() {
+    this.passwordField = !this.passwordField;
+  }
 
   checkPassword() {
     console.log(this.password);
@@ -36,16 +42,16 @@ export class EditPigReportComponent implements OnInit {
 
   updateStatus() {
     this.pigReport = this.crud.getPigReportByDate(this.givenDate);
-	console.log('this.pigReport in edit ', this.pigReport);
-  if (this.pigReport) {
-    if (this.updatedStatus === '0') {
-      this.pigReport.status = Status.READYFORPICKUP;
-    } else {
-      this.pigReport.status = Status.RETRIEVED;
+    console.log('this.pigReport in edit ', this.pigReport);
+    if (this.pigReport) {
+      if (this.updatedStatus === '0') {
+        this.pigReport.status = Status.READYFORPICKUP;
+      } else {
+        this.pigReport.status = Status.RETRIEVED;
+      }
+      this.crud.updatePigReportStatus(this.pigReport);
+      this.router.navigate(['']);
     }
-    this.crud.updatePigReportStatus(this.pigReport);
-    this.router.navigate(['']);
-  }
   }
 
   ngOnInit(): void {
