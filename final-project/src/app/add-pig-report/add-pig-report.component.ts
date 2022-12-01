@@ -26,9 +26,9 @@ export class AddPigReportComponent implements OnInit {
       pigBreed: new FormControl(null, [Validators.required]),
       pigPid: new FormControl(null, [Validators.required]),
       locationSetter: new FormControl(null, [Validators.required]),
-      locationName: new FormControl(null, [Validators.required]),
-      locationLat: new FormControl(null, [Validators.required]),
-      locationLong: new FormControl(null, [Validators.required]),
+      locationName: new FormControl({value:null, disabled: true}, [Validators.required]),
+      locationLat: new FormControl({value:null, disabled: true}, [Validators.required]),
+      locationLong: new FormControl({value:null, disabled: true}, [Validators.required]),
       notes: new FormControl(null, [Validators.required]),
       time: new FormControl(null, [Validators.required]),
       date: new FormControl(null, [Validators.required]),
@@ -38,14 +38,28 @@ export class AddPigReportComponent implements OnInit {
     this.form = new FormGroup(formControl);
   }
 
+  enableLocation() {
+	this.form.controls['locationName'].enable();
+	this.form.controls['locationLat'].enable();
+	this.form.controls['locationLong'].enable();
+  }
+
+  disableLocation() {
+	this.form.controls['locationName'].disable();
+	this.form.controls['locationLat'].disable();
+	this.form.controls['locationLong'].disable();
+}
+
   toggleNewLocation() {
     if (this.form.value.locationSetter === 'Other') {
+			this.enableLocation();
       this.form.controls['locationName'].setValue(null);
       this.form.controls['locationLat'].setValue(null);
       this.form.controls['locationLong'].setValue(null);
     } else {
       //Later change dependend on locationSetter
       let selectedLocation = this.form.controls['locationSetter'].value;
+	  this.disableLocation();
       //Loop through locations and find the selected location
       for (let i = 0; i < this.locations.length; i++) {
         if (this.locations[i].name === selectedLocation) {
@@ -54,9 +68,6 @@ export class AddPigReportComponent implements OnInit {
           this.form.controls['locationLong'].setValue(this.locations[i].lng);
         }
       }
-      //   this.form.controls['locationName'].setValue('MetroTown');
-      //   this.form.controls['locationLat'].setValue(12414);
-      //   this.form.controls['locationLong'].setValue(12414);
     }
   }
 
