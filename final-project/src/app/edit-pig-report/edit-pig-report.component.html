@@ -8,11 +8,10 @@
 				<div class="mb-3">
 					<label for="passwordDelete" class="form-label">Password</label>
 					<div class="input-group mb-3">
-						<input [type]="passwordField ? 'text' : 'password'" class="form-control" formControlName="passwordDelete" ria-describedby="button-addon1"
+						<input [type]="passwordField ? 'text' : 'password'" class="form-control" aria-describedby="button-addon1"
 							[(ngModel)]="password" />
 						<button class="btn btn-outline-secondary" type="button" id="button-addon1" (click)="togglePasswordVisibility()">
-							<i class="bi" [ngClass]="{
-							'bi-eye-slash': !passwordField,
+							<i class="bi-eye-slash" [ngClass]="{
 							'bi-eye': passwordField
 						}"></i></button>
 					</div>

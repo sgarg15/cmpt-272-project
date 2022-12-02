@@ -36,7 +36,9 @@ export class EditPigReportComponent implements OnInit {
     if (this.password === 'OINK!!') {
       this.passwordCheck = !this.passwordCheck;
     } else {
-      this.error = !this.error;
+      if (!this.error) {
+        this.error = !this.error;
+      }
     }
   }
 
