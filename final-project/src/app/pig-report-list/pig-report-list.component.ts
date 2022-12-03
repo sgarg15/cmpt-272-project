@@ -53,10 +53,15 @@ export class PigReportListComponent implements OnInit {
   sortByTime() {
     console.log('sorting by time');
     this.sortTime = !this.sortTime;
+
     if (this.sortTime) {
-      this.pigReportList.sort((a, b) => (a.date > b.date ? 1 : -1));
+      return this.pigReportList.sort((a, b) => {
+        return <any>new Date(b.date) - <any>new Date(a.date);
+      });
     } else {
-      this.pigReportList.sort((a, b) => (a.date < b.date ? 1 : -1));
+      return this.pigReportList.sort((a, b) => {
+        return <any>new Date(a.date) - <any>new Date(b.date);
+      });
     }
   }
 
