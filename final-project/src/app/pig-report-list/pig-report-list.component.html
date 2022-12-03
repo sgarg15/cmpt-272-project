@@ -12,6 +12,9 @@
 		</tr>
 	</thead>
 	<tbody>
+		<tr *ngIf="pigReportList.length === 0">
+			<td colspan="5" class="text-center">No reports found</td>
+		</tr>
 		<ng-container *ngFor="let pigReport of pigReportList">
 			<tr app-pig-report [pigReport]="pigReport" class=" align-middle">
 			</tr>
