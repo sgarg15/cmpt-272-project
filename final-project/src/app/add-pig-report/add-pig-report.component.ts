@@ -48,7 +48,9 @@ export class AddPigReportComponent implements OnInit {
     if (control.value != null) {
       for (let i = 0; i < this.locations.length; i++) {
         if (this.locations[i].name === control.value) {
-          return { usedName: true };
+			console.log('usedNameValidator: ', control.value);
+      console.log('usedNameValidator: ', this.locations[i].name);
+          return { usedNameError: true };
         }
       }
     }
