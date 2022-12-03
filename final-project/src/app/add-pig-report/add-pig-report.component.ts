@@ -1,6 +1,11 @@
 import { Time } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { CrudService } from '../crud.service';
 import { StatusEditPipe } from '../status-edit.pipe';
@@ -13,7 +18,8 @@ import { PigReportInterface } from '../util/pigReport.module';
 })
 export class AddPigReportComponent implements OnInit {
   form: FormGroup;
-  locations;
+  locations: any[];
+  placeHolderName = 'Enter your name';
 
   constructor(
     private router: Router,
@@ -25,7 +31,7 @@ export class AddPigReportComponent implements OnInit {
       reporterPhone: new FormControl(null, [Validators.required]),
       pigBreed: new FormControl(null, [Validators.required]),
       pigPid: new FormControl(null, [Validators.required]),
-      locationSetter: new FormControl(null, [Validators.required]),
+      locationSetter: new FormControl('Other', [Validators.required]),
       locationName: new FormControl(null, [Validators.required]),
       locationLat: new FormControl(null, [Validators.required]),
       locationLong: new FormControl(null, [Validators.required]),
@@ -38,31 +44,46 @@ export class AddPigReportComponent implements OnInit {
     this.form = new FormGroup(formControl);
   }
 
+  usedNameValidator(control: FormControl) {
+    if (control.value != null) {
+      for (let i = 0; i < this.locations.length; i++) {
+        if (this.locations[i].name === control.value) {
+          return { usedName: true };
+        }
+      }
+    }
+    return null;
+  }
+
   enableLocation() {
-	this.form.controls['locationName'].enable();
-	this.form.controls['locationLat'].enable();
-	this.form.controls['locationLong'].enable();
+    this.form.controls['locationName'].enable();
+    this.form.controls['locationLat'].enable();
+    this.form.controls['locationLong'].enable();
   }
 
   disableLocation() {
-	this.form.controls['locationName'].disable();
-	this.form.controls['locationLat'].disable();
-	this.form.controls['locationLong'].disable();
-}
+    this.form.controls['locationName'].disable();
+    this.form.controls['locationLat'].disable();
+    this.form.controls['locationLong'].disable();
+  }
 
   toggleNewLocation() {
     if (this.form.value.locationSetter === 'Other') {
-			this.enableLocation();
+      this.enableLocation();
+      this.form.controls['locationName'].setValidators([
+        Validators.required,
+        this.usedNameValidator.bind(this),
+      ]);
       this.form.controls['locationName'].setValue(null);
       this.form.controls['locationLat'].setValue(null);
       this.form.controls['locationLong'].setValue(null);
       console.log('FORM VALUE: ', this.form.value);
-	  console.log('FORM CONTROLS: ', this.form.controls);
-	  console.log('FORM: ', this.form);
-
+      console.log('FORM CONTROLS: ', this.form.controls);
+      console.log('FORM: ', this.form);
     } else {
       //Later change dependend on locationSetter
       let selectedLocation = this.form.controls['locationSetter'].value;
+      this.form.controls['locationName'].setValidators([Validators.required]);
       //Loop through locations and find the selected location
       for (let i = 0; i < this.locations.length; i++) {
         if (this.locations[i].name === selectedLocation) {
@@ -125,9 +146,9 @@ export class AddPigReportComponent implements OnInit {
 
     if (this.form.controls['locationSetter'].value === 'Other') {
       this.crud.addLocationList(newPigReport.foundLocation);
+    } else {
+      this.crud.updateMapListNum(newPigReport.foundLocation);
     }
-
-	this.crud.updateMapListNum(newPigReport.foundLocation);
 
     //Add the new report to the list
     this.crud.addPigReport(newPigReport);
@@ -139,5 +160,9 @@ export class AddPigReportComponent implements OnInit {
 
   ngOnInit(): void {
     this.updateLocationList();
+    this.form.controls['locationName'].setValidators([
+      Validators.required,
+      this.usedNameValidator.bind(this),
+    ]);
   }
 }

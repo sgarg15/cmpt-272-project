@@ -236,11 +236,14 @@ export class CrudService {
   }
 
   deletePigReport(pigReport: PigReportInterface) {
-	this.pigReportList.findIndex((report, index) => {
-		if (report.date.valueOf() == pigReport.date.valueOf()) {
-			this.pigReportList.splice(index, 1);
-		}
-	});
+	console.log('deletePigReport: ', pigReport);
+
+  for (const [index, report] of this.pigReportList.entries()) {
+    if (new Date(report.date).valueOf() == pigReport.date.valueOf()) {
+      this.pigReportList.splice(index, 1);
+      break;
+    }
+  }
 
 
     //Also update the server pig report list variable
@@ -282,18 +285,11 @@ export class CrudService {
   }
 
   addLocationList(newLocation: PigLocation) {
-    if (
-      this.locationList.findIndex(
-        (location) => location.name === newLocation.name
-      ) === -1
-    ) {
-      this.locationList.push(newLocation);
-      this.updateLocationListServer();
-      this.subject.next(this.locationList);
-    } else {
-      console.log('Location already exists!');
-      this.updateMapListNum(newLocation);
-    }
+    console.log('----------	newLocation: ', newLocation);
+    newLocation.num++;
+    this.locationList.push(newLocation);
+    this.updateLocationListServer();
+    this.subject.next(this.locationList);
   }
   //#endregion
 

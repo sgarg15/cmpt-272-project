@@ -6,19 +6,31 @@
 		<form id="addPigReportForm" (ngSubmit)="onSubmit(form.value)" [formGroup]="form">
 			<section class=" form-floating  mb-3">
 				<input type="text" class="form-control" id="reporterName" placeholder="Robin" formControlName="reporterName" required>
+				<small class="text-danger" *ngIf="form.get('reporterName').hasError('required')">
+					This field is required.
+				</small>
 				<label for="reporterName" class="form-label">Reporter Name</label>
 			</section>
 			<section class=" form-floating mb-3">
 				<input type="number" class="form-control" id="reporterPhone" placeholder="(778) - 777 - 9999" formControlName="reporterPhone"
 					required>
+					<small class="text-danger" *ngIf="form.get('reporterPhone').hasError('required')">
+						This field is required.
+					</small>
 				<label for="reporterPhone" class="form-label">Reporter Phone Number</label>
 			</section>
 			<section class=" form-floating mb-3">
 				<input type="text" class="form-control" id="pigBreed" placeholder="50 kg" formControlName="pigBreed" required>
+				<small class="text-danger" *ngIf="form.get('pigBreed').hasError('required')">
+					This field is required.
+				</small>
 				<label for="pigBreed" class="form-label">Breed</label>
 			</section>
 			<section class=" form-floating mb-3">
 				<input type="number" class="form-control" id="pigPid" placeholder="Cute" formControlName="pigPid" required>
+				<small class="text-danger" *ngIf="form.get('pigPid').hasError('required')">
+					This field is required.
+				</small>
 				<label for="pigPid" class="form-label">PID</label>
 			</section>
 			<section class="form-floating mb-3">
@@ -43,14 +55,23 @@
 			</section>
 			<section class=" form-floating mb-3">
 				<input type="text" class="form-control" id="notes" placeholder="Cute" formControlName="notes" required>
+				<small class="text-danger" *ngIf="form.get('notes').hasError('required')">
+					This field is required.
+				</small>
 				<label for="notes" class="form-label">Notes</label>
 			</section>
 			<section class=" form-floating mb-3">
 				<input type="date" class="form-control" id="date" placeholder="Cute" formControlName="date" required>
+				<small class="text-danger" *ngIf="form.get('date').hasError('required')">
+					This field is required and must be a valid date.
+				</small>
 				<label for="date" class="form-label">Date/Time</label>
 			</section>
 			<section class=" form-floating mb-3">
 				<input type="time" class="form-control" id="time" placeholder="Cute" formControlName="time" required>
+				<small class="text-danger" *ngIf="form.get('time').hasError('required')">
+					This field is required and must be a valid time.
+				</small>
 				<label for="time" class="form-label">Time</label>
 			</section>
 			<section class="form-floating mb-3">
