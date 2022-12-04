@@ -28,7 +28,10 @@ export class AddPigReportComponent implements OnInit {
   ) {
     let formControl = {
       reporterName: new FormControl(null, [Validators.required]),
-      reporterPhone: new FormControl(null, [Validators.required]),
+      reporterPhone: new FormControl(null, [
+        Validators.required,
+        Validators.pattern('^((\\+91-?)|0)?[0-9]{10}$'),
+      ]),
       pigBreed: new FormControl(null, [Validators.required]),
       pigPid: new FormControl(null, [Validators.required]),
       locationSetter: new FormControl('Other', [Validators.required]),

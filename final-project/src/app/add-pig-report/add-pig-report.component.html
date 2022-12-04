@@ -17,6 +17,9 @@
 					<small class="text-danger" *ngIf="form.controls['reporterPhone'].touched && form.get('reporterPhone').hasError('required')">
 						This field is required.
 					</small>
+					<small class="text-danger" *ngIf="form.controls['reporterPhone'].touched && form.get('reporterPhone').hasError('pattern')">
+						The phone number must be 10 digits long (Ex. 1234567890 ).
+					</small>
 				<label for="reporterPhone" class="form-label">Reporter Phone Number</label>
 			</section>
 			<section class=" form-floating mb-3">
