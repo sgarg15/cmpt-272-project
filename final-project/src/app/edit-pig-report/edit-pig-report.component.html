@@ -1,26 +1,26 @@
-<div class="card shadow-lg p-3 mb-5 bg-body rounded" style="margin-left: 25%; margin-right: 25%; margin-top: 20px; border-radius: 30px;">
-	<div class="card-header py-3">
+<section class="card shadow-lg p-3 mb-5 bg-body rounded" style="margin-left: 25%; margin-right: 25%; margin-top: 20px; border-radius: 30px;">
+	<section class="card-header py-3">
 		<h5 class="mb-0">Edit Pig Report Status</h5>
-	</div>
-	<div class="card-body">
+	</section>
+	<section class="card-body">
 		<section *ngIf="!passwordCheck">
-			<div class="">
-				<div class="mb-3">
+			<section class="">
+				<section class="mb-3">
 					<label for="passwordDelete" class="form-label">Password</label>
-					<div class="input-group mb-3">
+					<section class="input-group mb-3">
 						<input [type]="passwordField ? 'text' : 'password'" class="form-control" aria-describedby="button-addon1"
 							[(ngModel)]="password" />
 						<button class="btn btn-outline-secondary" type="button" id="button-addon1" (click)="togglePasswordVisibility()">
 							<i class="bi-eye-slash" [ngClass]="{
 							'bi-eye': passwordField
 						}"></i></button>
-					</div>
-				</div>
-			</div>
+					</section>
+					</section>
+					</section>
 			<section *ngIf="error">
-				<div class="alert alert-danger alert-dismissible" alert-dismissible role="alert">
+				<section class="alert alert-danger alert-dismissible" alert-dismissible role="alert">
 					Incorrect Password
-				</div>
+				</section>
 			</section>
 			<hr>
 			<section class="text-end">
@@ -33,13 +33,13 @@
 
 		<section *ngIf="passwordCheck">
 			<!-- Update status select here -->
-			<div class="">
+			<section class="">
 				<label for="status">Status</label>
 				<select class="form-select" id="status" [(ngModel)]="updatedStatus">
 					<option value=0>Ready for Pickup</option>
 					<option value=1>Retrieved</option>
 				</select>
-			</div>
+			</section>
 			<hr>
 			<section class="text-end">
 				<a href="">
@@ -49,5 +49,5 @@
 			</section>
 		</section>
 
-	</div>
-</div>
+	</section>
+	</section>
