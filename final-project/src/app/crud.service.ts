@@ -33,16 +33,16 @@ export class CrudService {
     this.http.get(url).subscribe((data) => {
       let locations = data[0]['data'];
       this.locationList = locations;
-	  console.log('Getting location from server this.locationList', this.locationList);
+	  
       this.subject.next(this.locationList);
-	  console.log('Getting location from server this.locationList', this.locationList);
+	  
     });
   }
 
   //Convert Server list to PigReportInterface
   convertToPigReportInterface() {
     for (let i = 0; i < this.serverPigReportList.length; i++) {
-      console.log(this.serverPigReportList[i]['data']);
+      
       let data = this.serverPigReportList[i]['data'];
       data.forEach((element) => {
         let newPigReport: PigReportInterface = {
@@ -57,7 +57,7 @@ export class CrudService {
         this.pigReportList.push(newPigReport);
       });
     }
-    console.log('this.pigReportList', this.pigReportList);
+    
   }
 
   //Get Server List of Pig Reports
@@ -66,7 +66,7 @@ export class CrudService {
     this.pigReportList = [];
     this.http.get(url).subscribe((data) => {
       this.serverPigReportList = data;
-      console.log('this.serverPigReportList', this.serverPigReportList);
+      
       this.convertToPigReportInterface();
 
 	  if (index != undefined && pigReport != undefined) {
@@ -96,10 +96,6 @@ export class CrudService {
     if (indexOfPigReport != -1) {
       //Add the pig report to the server pig report list
       this.serverPigReportList[indexOfPigReport]['data'].push(pigReport);
-      console.log(
-        'this.serverPigReportList Updated: ',
-        this.serverPigReportList
-      );
 
       //Update the server pig report list
       this.http
@@ -108,8 +104,8 @@ export class CrudService {
           data: this.serverPigReportList[indexOfPigReport]['data'],
         })
         .subscribe((data) => {
-          console.log('Pig Report Updated on Server');
-          console.log(data);
+          
+          
           this.getPigReportsFromServer();
         });
     } else {
@@ -117,17 +113,13 @@ export class CrudService {
         key: pid.toString(),
         data: [pigReport],
       });
-      console.log(
-        'this.serverPigReportList Updated with new pid: ',
-        this.serverPigReportList
-      );
 
       //Add the pig report to the server pig report list
       this.http
         .post(url, { key: pid.toString(), data: [pigReport] })
         .subscribe((data) => {
-          console.log('Pig Report Added to Server');
-          console.log(data);
+          
+          
           this.getPigReportsFromServer();
         });
     }
@@ -145,8 +137,8 @@ export class CrudService {
         data: this.serverPigReportList[index]['data'],
       })
       .subscribe((data) => {
-        console.log('Pig Report Updated on Server');
-        console.log(data);
+        
+        
         this.getPigReportsFromServer(index, pigReport);
 
 
@@ -166,14 +158,14 @@ export class CrudService {
 
   //Update Location Information
   updateLocationListServer() {
-    console.log('UPLOADING this.locationList', this.locationList);
+    
     let url = this.apiUrl + '/locations/documents/locationList/';
     this.http
       .put(url, { key: 'locationList', data: this.locationList })
       .subscribe((data) => {
 		this.getLocationsFromServer();	
-        console.log('Location List Updated on Server');
-        console.log(data);
+        
+        
       });
   }
   //#endregion
@@ -187,12 +179,12 @@ export class CrudService {
   addPigReport(pigReport: PigReportInterface) {
     this.pigReportList.push(pigReport);
     this.addPigReportToServer(pigReport);
-    console.log('New pig report added!');
-    console.log(this.pigReportList);
+    
+    
   }
 
   updatePigReportStatus(pigReport: PigReportInterface) {
-    console.log('updatePigReportStatus: ', pigReport);
+    
 
     this.pigReportList.forEach((element, index) => {
       if (element.pigFound.pid == pigReport.pigFound.pid) {
@@ -207,14 +199,14 @@ export class CrudService {
     let indexOfPigReportStatus = this.serverPigReportList[indexOfPigReport][
       'data'
     ].findIndex((report) => {
-      console.log('report.date.valueOf(): ', new Date(report.date).valueOf());
-      console.log('pigReport.date.valueOf(): ', pigReport.date.valueOf());
+      
+      
       return new Date(report.date).valueOf() === pigReport.date.valueOf();
     });
 
-    console.log(' this.serverPigReportList: ', this.serverPigReportList);
-    console.log('indexOfPigReport: ', indexOfPigReport);
-    console.log('indexOfPigReportStatus: ', indexOfPigReportStatus);
+    
+    
+    
 
     this.serverPigReportList[indexOfPigReport]['data'].forEach(
       (element, index) => {
@@ -226,17 +218,17 @@ export class CrudService {
     this.serverPigReportList[indexOfPigReport]['data'][
       indexOfPigReportStatus
     ].status = pigReport.status;
-    console.log('this.serverPigReportList', this.serverPigReportList);
+    
 
     //Update the server pig report list
     this.updatePigReportServer(indexOfPigReport, pigReport);
 
-    console.log('Pig report status updated!');
-    console.log(this.pigReportList);
+    
+    
   }
 
   deletePigReport(pigReport: PigReportInterface) {
-	console.log('deletePigReport: ', pigReport);
+	
 
   for (const [index, report] of this.pigReportList.entries()) {
     if (new Date(report.date).valueOf() == pigReport.date.valueOf()) {
@@ -253,8 +245,8 @@ export class CrudService {
     let indexOfPigReportStatus = this.serverPigReportList[indexOfPigReport][
       'data'
     ].findIndex((report) => {
-      console.log('report.date.valueOf(): ', new Date(report.date).valueOf());
-      console.log('pigReport.date.valueOf(): ', pigReport.date.valueOf());
+      
+      
       return new Date(report.date).valueOf() === pigReport.date.valueOf();
     });
 
@@ -267,8 +259,8 @@ export class CrudService {
     //Update the server pig report list
     this.updatePigReportServer(indexOfPigReport, pigReport);
 
-    console.log('Pig report deleted!');
-    console.log(this.pigReportList);
+    
+    
   }
 
   getPigReportByDate(date: Date): PigReportInterface | undefined {
@@ -285,7 +277,7 @@ export class CrudService {
   }
 
   addLocationList(newLocation: PigLocation) {
-    console.log('----------	newLocation: ', newLocation);
+    
     newLocation.num++;
     this.locationList.push(newLocation);
     this.updateLocationListServer();
@@ -300,43 +292,43 @@ export class CrudService {
   }
 
   updateMapListNum(location: PigLocation) {
-    console.log('updateMapListNum: ', location);
+    
     const index = this.locationList.findIndex((loc) => {
       return loc.name == location.name;
     });
 
-    console.log('index: ', index);
+    
 
     this.locationList[index].num++;
 
-    console.log('this.locationList: ', this.locationList);
+    
 
     this.updateLocationListServer();
 
     this.subject.next(this.locationList);
-    console.log(this.locationList);
+    
   }
 
   decrementMapListNum(location: PigLocation) {
-    console.log('decrementMapListNum: ', location);
+    
     const index = this.locationList.findIndex((loc) => {
-		console.log('loc.lat: ', loc.lat);
-		console.log('location.lat: ', location.lat);
-		console.log('loc.lng: ', loc.lng);
-		console.log('location.lng: ', location.lng);
+		
+		
+		
+		
       return loc.lat == location.lat && loc.lng == location.lng;
     });
 
-    console.log('index: ', index);
+    
 
     this.locationList[index].num--;
 
-    console.log('this.locationList: ', this.locationList);
+    
     this.subject.next(this.locationList);
 
     this.updateLocationListServer();
 
-    console.log(this.locationList);
+    
   }
 
   //#endregion

@@ -29,7 +29,7 @@ export class DeletePigReportComponent implements OnInit {
   }
 
   checkPassword() {
-    console.log(this.password);
+    
     if (this.password === 'OINK!!') {
       this.passwordCheck = !this.passwordCheck;
     } else {
@@ -43,7 +43,7 @@ export class DeletePigReportComponent implements OnInit {
     this.passwordCheck = false;
     this.pigReport = this.crud.getPigReportByDate(this.givenDate);
 
-    console.log(this.pigReport);
+    
 
     if (this.pigReport) {
       this.crud.deletePigReport(this.pigReport);

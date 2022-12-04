@@ -23,7 +23,7 @@ export class PigReportListComponent implements OnInit {
   }
 
   sortByLocation() {
-    console.log('sorting by location');
+    
     this.sortLocation = !this.sortLocation;
     if (this.sortLocation) {
       this.pigReportList.sort((a, b) =>
@@ -37,7 +37,7 @@ export class PigReportListComponent implements OnInit {
   }
 
   sortByReportedBy() {
-    console.log('sorting by reported by');
+    
     this.sortReportedBy = !this.sortReportedBy;
     if (this.sortReportedBy) {
       this.pigReportList.sort((a, b) =>
@@ -51,7 +51,7 @@ export class PigReportListComponent implements OnInit {
   }
 
   sortByTime() {
-    console.log('sorting by time');
+    
     this.sortTime = !this.sortTime;
 
     if (this.sortTime) {
@@ -66,7 +66,7 @@ export class PigReportListComponent implements OnInit {
   }
 
   sortByStatus() {
-    console.log('sorting by status');
+    
     this.sortStatus = !this.sortStatus;
     if (this.sortStatus) {
       this.pigReportList.sort((a, b) => (a.status > b.status ? 1 : -1));

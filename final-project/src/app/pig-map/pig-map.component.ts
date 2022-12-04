@@ -74,7 +74,6 @@ export class PigMapComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     this.initMap();
     this.crud.getMapList().subscribe((data) => {
-      console.log('Map data: ', data);
       this.locations = data;
       this.addMarkersToMap();
     });

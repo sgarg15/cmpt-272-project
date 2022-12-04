@@ -83,9 +83,9 @@ export class InfoPigReportComponent implements OnInit {
   }
 
   updatePigReportToShow() {
-    console.log('givenDate: ' + this.givenDate);
+    
     this.pigReport = this.crud.getPigReportByDate(this.givenDate);
-    console.log(this.pigReport);
+    
   }
 
   ngOnInit(): void {

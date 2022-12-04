@@ -35,7 +35,7 @@ export class EditPigReportComponent implements OnInit {
 
   updateStatus() {
     this.pigReport = this.crud.getPigReportByDate(this.givenDate);
-    console.log('this.pigReport in edit ', this.pigReport);
+    
     if (this.pigReport) {
       if (this.updatedStatus === '0') {
         this.pigReport.status = Status.READYFORPICKUP;
@@ -51,7 +51,7 @@ export class EditPigReportComponent implements OnInit {
     this.http
       .get('https://api.hashify.net/hash/md5/hex?value=' + this.password)
       .subscribe((data: any) => {
-        console.log(data.Digest);
+        
         if (data.Digest === '84892b91ef3bf9d216bbc6e88d74a77c') {
           this.passwordCheck = !this.passwordCheck;
         } else {

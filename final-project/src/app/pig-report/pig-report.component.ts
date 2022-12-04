@@ -23,9 +23,6 @@ export class PigReportComponent implements OnInit {
   }
 
   editStatus(evt: any, date: Date) {
-	console.log('editStatus');
-  console.log(date);
-  console.log(date.toJSON());
     this.router.navigate(['/editPigReport', date.toJSON()]);
   }
 
