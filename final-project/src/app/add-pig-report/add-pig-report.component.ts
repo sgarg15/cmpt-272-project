@@ -47,7 +47,6 @@ export class AddPigReportComponent implements OnInit {
       notes: new FormControl(null, [Validators.required]),
       time: new FormControl(null, [Validators.required]),
       date: new FormControl(null, [Validators.required]),
-      status: new FormControl(null, [Validators.required]),
     };
 
     this.form = new FormGroup(formControl);
@@ -152,7 +151,7 @@ export class AddPigReportComponent implements OnInit {
       },
       notes: values.notes,
       date: date,
-      status: this.statusEdit.transform(values.status, 'string'),
+      status: 0,
     };
 
     if (this.form.controls['locationSetter'].value === 'Other') {

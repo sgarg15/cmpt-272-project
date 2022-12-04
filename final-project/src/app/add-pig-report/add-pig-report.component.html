@@ -95,16 +95,6 @@
 				</small>
 				<label for="time" class="form-label">Time</label>
 			</section>
-			<section class="form-floating mb-3">
-				<select id="status" class="form-select " aria-label="Default select example" formControlName="status">
-					<option>Ready for Pickup</option>
-					<option>Retrieved</option>
-				</select>
-				<small class="text-danger" *ngIf="form.controls['status'].touched && form.get('time').hasError('required')">
-					This field is required.
-				</small>
-				<label for="status" class="form-label">Status</label>
-			</section>
 
 			<hr>
 			<section class="text-end">
