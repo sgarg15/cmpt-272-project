@@ -33,8 +33,14 @@ export class AddPigReportComponent implements OnInit {
       pigPid: new FormControl(null, [Validators.required]),
       locationSetter: new FormControl('Other', [Validators.required]),
       locationName: new FormControl(null, [Validators.required]),
-      locationLat: new FormControl(null, [Validators.required]),
-      locationLong: new FormControl(null, [Validators.required]),
+      locationLat: new FormControl(null, [
+        Validators.required,
+        this.latitudeValidator.bind(this),
+      ]),
+      locationLong: new FormControl(null, [
+        Validators.required,
+        this.longitudeValidator.bind(this),
+      ]),
       notes: new FormControl(null, [Validators.required]),
       time: new FormControl(null, [Validators.required]),
       date: new FormControl(null, [Validators.required]),
@@ -48,10 +54,26 @@ export class AddPigReportComponent implements OnInit {
     if (control.value != null) {
       for (let i = 0; i < this.locations.length; i++) {
         if (this.locations[i].name === control.value) {
-			
-      
           return { usedNameError: true };
         }
+      }
+    }
+    return null;
+  }
+
+  latitudeValidator(control: FormControl) {
+    if (control.value != null) {
+      if (control.value < -90 || control.value > 90) {
+        return { latitudeError: true };
+      }
+    }
+    return null;
+  }
+
+  longitudeValidator(control: FormControl) {
+    if (control.value != null) {
+      if (control.value < -180 || control.value > 180) {
+        return { longitudeError: true };
       }
     }
     return null;
@@ -79,9 +101,6 @@ export class AddPigReportComponent implements OnInit {
       this.form.controls['locationName'].setValue(null);
       this.form.controls['locationLat'].setValue(null);
       this.form.controls['locationLong'].setValue(null);
-      
-      
-      
     } else {
       //Later change dependend on locationSetter
       let selectedLocation = this.form.controls['locationSetter'].value;
@@ -89,16 +108,11 @@ export class AddPigReportComponent implements OnInit {
       //Loop through locations and find the selected location
       for (let i = 0; i < this.locations.length; i++) {
         if (this.locations[i].name === selectedLocation) {
-          
-
           this.form.controls['locationName'].setValue(this.locations[i].name);
           this.form.controls['locationLat'].setValue(this.locations[i].lat);
           this.form.controls['locationLong'].setValue(this.locations[i].lng);
-          
 
           this.disableLocation();
-          
-          
         }
       }
     }
@@ -106,11 +120,9 @@ export class AddPigReportComponent implements OnInit {
 
   updateLocationList() {
     this.locations = this.crud.getLocationList();
-    
   }
 
   onSubmit(values: any) {
-    
     let currentSeconds = new Date().getSeconds();
     //Create a new report object
     var date: Date = new Date(
@@ -139,8 +151,6 @@ export class AddPigReportComponent implements OnInit {
       date: date,
       status: this.statusEdit.transform(values.status, 'string'),
     };
-
-    
 
     if (this.form.controls['locationSetter'].value === 'Other') {
       this.crud.addLocationList(newPigReport.foundLocation);

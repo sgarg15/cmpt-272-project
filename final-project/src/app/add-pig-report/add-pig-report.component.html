@@ -56,12 +56,18 @@
 				<small class="text-danger" *ngIf="form.controls['locationLat'].touched && form.get('locationLat').hasError('required')">
 					This field is required.
 				</small>
+				<small class="text-danger" *ngIf="form.controls['locationLat'].touched && form.get('locationLat').hasError('latitudeError')">
+					This location latitude must be between -90 and 90.
+				</small>
 				<label for="locationLat" class="form-label">Location Latitude</label>
 			</section>
 			<section class=" form-floating mb-3">
 				<input type="number" class="form-control" id="locationLong" placeholder="Cute" formControlName="locationLong" required>
 				<small class="text-danger" *ngIf="form.controls['locationLong'].touched &&  form.get('locationLong').hasError('required')">
 					This field is required.
+				</small>
+				<small class="text-danger" *ngIf="form.controls['locationLat'].touched && form.get('locationLat').hasError('longitudeError')">
+					This location latitude must be between -180 and 180.
 				</small>
 				<label for="locationLong" class="form-label">Location Longitude</label>
 			</section>
