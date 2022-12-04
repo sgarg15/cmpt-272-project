@@ -12,6 +12,9 @@
 		</tr>
 	</thead>
 	<tbody>
+		<tr *ngIf="pigReportList.length === 0">
+			<td colspan="5" class="text-center">No reports found</td>
+		</tr>
 		<ng-container *ngFor="let pigReport of pigReportList">
 			<tr app-pig-report [pigReport]="pigReport" class=" align-middle">
 			</tr>
@@ -20,5 +23,4 @@
 </table>
 <section style="height: 80px"></section>
 
-<a href="/addPigReport"><button class="fixed-bottom btn btn-primary" style="margin: 20px; height: 50px; border-radius: 15px;">Create Pig
-		Report</button></a>
+<button class="fixed-bottom btn btn-primary" style="margin: 20px; height: 50px; border-radius: 15px;" (click)="addNewPig()">Create Pig Report</button>

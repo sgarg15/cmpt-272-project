@@ -2,7 +2,7 @@ import { Component, AfterViewInit } from '@angular/core';
 import * as L from 'leaflet';
 
 //Need to add to make leaflet icons work
-import { icon, Marker} from 'leaflet';
+import { icon, Marker } from 'leaflet';
 import { CrudService } from '../crud.service';
 import { PigLocation } from '../util/location.module';
 const iconRetinaUrl = 'assets/marker-icon-2x.png';
@@ -52,14 +52,18 @@ export class PigMapComponent implements AfterViewInit {
   }
 
   public addMarkersToMap() {
-    this.locations.forEach((location) => {
-      this.addMarkerToMap(
-        location.lat,
-        location.lng,
-        location.name,
-        location.num
-      );
-    });
+    if (this.locations != null) {
+      this.locations.forEach((location) => {
+        if (location.num > 0) {
+          this.addMarkerToMap(
+            location.lat,
+            location.lng,
+            location.name,
+            location.num
+          );
+        }
+      });
+    }
   }
 
   public addMarkerToMap(lat: number, lng: number, name: string, num?: number) {
@@ -69,7 +73,10 @@ export class PigMapComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.initMap();
-    this.locations = this.crud.getMapList();
-    this.addMarkersToMap();
+    this.crud.getMapList().subscribe((data) => {
+      console.log('Map data: ', data);
+      this.locations = data;
+      this.addMarkersToMap();
+    });
   }
 }

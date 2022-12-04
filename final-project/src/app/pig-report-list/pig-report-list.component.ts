@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { CrudService } from '../crud.service';
 import { PigReportInterface } from '../util/pigReport.module';
 import { Status } from '../util/status.module';
@@ -15,7 +16,11 @@ export class PigReportListComponent implements OnInit {
   private sortTime = true;
   private sortStatus = true;
 
-  constructor(private crud: CrudService) {}
+  constructor(private crud: CrudService, private router: Router) {}
+
+  addNewPig() {
+    this.router.navigate(['/addPigReport']);
+  }
 
   sortByLocation() {
     console.log('sorting by location');
@@ -48,10 +53,15 @@ export class PigReportListComponent implements OnInit {
   sortByTime() {
     console.log('sorting by time');
     this.sortTime = !this.sortTime;
+
     if (this.sortTime) {
-      this.pigReportList.sort((a, b) => (a.date > b.date ? 1 : -1));
+      return this.pigReportList.sort((a, b) => {
+        return <any>new Date(b.date) - <any>new Date(a.date);
+      });
     } else {
-      this.pigReportList.sort((a, b) => (a.date < b.date ? 1 : -1));
+      return this.pigReportList.sort((a, b) => {
+        return <any>new Date(a.date) - <any>new Date(b.date);
+      });
     }
   }
 
